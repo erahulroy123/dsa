@@ -115,6 +115,93 @@ class LinkedList:
             before = temp
             temp = after
 
+    def find_middle_node(self):
+        slow = self.head
+        fast = self.head
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+        return slow.value
+
+    def has_loop(self):
+        slow = self.head
+        fast = self.head
+        while fast is not None and fast.next is not None:
+            slow = slow.next
+            fast = fast.next.next
+            if slow == fast:
+                return True
+        return False
+
+    def find_kth_from_end(self, k):
+        slow = fast = self.head
+        for _ in range(k):
+            if fast is None:
+                return None
+            fast = fast.next
+        while fast:
+            slow = slow.next
+            fast = fast.next
+        return slow
+
+    def partition_list(self, x):
+        if not self.head:
+            return None
+        dummy1 = Node(0)
+        dummy2 = Node(0)
+        prev1 = dummy1
+        prev2 = dummy2
+        current = self.head
+        while current:
+            if current.value < x:
+                prev1.next = current
+                prev1 = current
+            else:
+                prev2.next = current
+                prev2 = current
+            current = current.next
+        prev1.next = None
+        prev2.next = None
+        prev1.next = dummy2.next
+        self.head = dummy1.next
+
+    def remove_duplicates(self):
+        values = set()
+        previous = None
+        current = self.head
+        while current:
+            if current.value in values:
+                previous.next = current.next
+                self.length -= 1
+            else:
+                values.add(current.value)
+                previous = current
+            current = current.next
+
+    def binary_to_decimal(self):
+        num = 0
+        current = self.head
+        while current:
+            num = num * 2 + current.value
+            current = current.next
+        return num
+
+    def reverse_between(self, start_index, end_index):
+        if self.length <= 1:
+            return
+        dummy_node = Node(0)
+        dummy_node.next = self.head
+        previous_node = dummy_node
+        for i in range(start_index):
+            previous_node = previous_node.next
+        current_node = previous_node.next
+        for i in range(end_index - start_index):
+            node_to_move = current_node.next
+            current_node.next = node_to_move.next
+            node_to_move.next = previous_node.next
+            previous_node.next = node_to_move
+        self.head = dummy_node.next
+
     def print_list(self):
         temp = self.head
         while temp:
